@@ -1,7 +1,7 @@
 # Arctic Training Hands on materials
 Hands on materials for the Arctic Data Training workshop
 
-* Data and Code: Sanghoon changed this.
+* Data and Code: Sanghoon did it again.
 * Lessons
 * Note
 
