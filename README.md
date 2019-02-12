@@ -8,3 +8,7 @@ Hands on materials for the Arctic Data Training workshop
 Made some changes from RStudio.
 
 And more changes.
+
+Change 1.
+
+Change 2.
