@@ -5,7 +5,7 @@ Hands on materials for the Arctic Data Training workshop
 * Lessons
 * Note
 
-Made some changes from RStudio. What if I want to change this as well?
+Made some changes from RStudio. We both want to make changes.
 
 And more changes.
 
