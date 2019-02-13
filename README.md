@@ -19,3 +19,5 @@ Hello again! This was changed by Helene. And I changed stuff again.
 This is new branch.
 
 Another change.
+
+Now this is final change in the branch.
