@@ -52,7 +52,58 @@ catch_wide <- catch_long %>%
 head(catch_wide)
 ```
 
+## Clean up our data or general QA
+
+* rename catch to catch_thousand
+* change catch column to numeric
+* create a new catch column in units num. of fish
+
+```{r}
+catch_clean <- catch_long %>% 
+  rename(catch_thousands = Catch) %>%
+  mutate(catch_thousands = ifelse(catch_thousands == "I", 1, catch_thousands)) %>% 
+  # %in% for multiple call or use correction table and join
+  mutate(catch_thousands = as.numeric(catch_thousands)) %>% 
+  mutate(Catch = catch_thousands * 1000) %>% 
+  select(-catch_thousands)
+
+head(catch_clean)
+```
+
+```{r, eavl = F, echo = F}
+#Look for where as.numeric failed
+test <- as.numeric(catch_long$Catch)
+i <- which(is.na(test) == T)
+catch_long[i,] #letter I is confused with number 1 in GSE region for 1955 (401 case)
+```
+
+## Split - Apply - Combine
+
+* calculate mean catch by species
+```{r}
+species_mean <- catch_clean %>% 
+  group_by(Species) %>% 
+  summarise(Catch_mean = mean(Catch),
+            Num_obs = n())
+#            Num_obs = length(Catch > 0))
+#            Num_obs = length(which(is.na(Catch) == F))
+head(species_mean)
+```
+
+* calculate mean catch by year
+```{r}
+species_mean <- catch_clean %>% 
+  group_by(Year) %>% 
+  summarise(Catch_mean = mean(Catch)) %>% # mutate adds
+  arrange(-Catch_mean) %>% 
+  filter(Year >= 1990 & Year <= 1995) #or is |
+
+head(species_mean)
+```
 
 # Join the Region Definitions
+
+
+
 
 # Misc. Function
