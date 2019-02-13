@@ -198,7 +198,8 @@ library(tidyr)
 # to call stats filter - stats::filter()</code></pre>
 <p><a href="https://knb.ecoinformatics.org/view/df35b.304.2">Mike Byerly. Alaska commercial salmon catches by management region (1886- 1997). Gulf of Alaska Data Portal. df35b.304.2.</a></p>
 <pre class="r"><code>catch_ori &lt;- read.csv(&quot;https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1&quot;, stringsAsFactors = F)
-region_ori &lt;- read.csv(&quot;https://knb.ecoinformatics.org/view/df35b.304.2&quot;, stringsAsFactors = F)</code></pre>
+region_ori &lt;- read.csv(&quot;https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1&quot;, stringsAsFactors = F)
+#for windows system, region_defs&lt;-read.csv(url(&quot;https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1&quot;, method = &quot;libcurl&quot;),stringsAsFactors = FALSE)</code></pre>
 <div id="reformat-catch-data" class="section level1">
 <h1>Reformat Catch Data</h1>
 <ul>
@@ -306,9 +307,61 @@ head(species_mean)</code></pre>
 </div>
 <div id="join-the-region-definitions" class="section level1">
 <h1>Join the Region Definitions</h1>
+<p>Left join between catch and region definitions</p>
+<pre class="r"><code>region_defs &lt;- region_ori %&gt;% 
+  select(code, mgmtArea)
+
+head (region_defs)</code></pre>
+<pre><code>##      code                                  mgmtArea
+## 1     GSE              Unallocated Southeast Alaska
+## 2     NSE                 Northern Southeast Alaska
+## 3     SSE                 Southern Southeast Alaska
+## 4     YAK                                   Yakutat
+## 5 PWSmgmt      Prince William Sound Management Area
+## 6     BER Bering River Subarea Copper River Subarea</code></pre>
+<pre class="r"><code>Catch_joined &lt;- left_join(catch_clean, region_defs, by = c(&quot;Region&quot; = &quot;code&quot;)) # or by = &quot;Region&quot; with rename (Region = code)
+
+head (Catch_joined)</code></pre>
+<pre><code>##   Region Year Species Catch                  mgmtArea
+## 1    SSE 1886 Chinook     0 Southern Southeast Alaska
+## 2    SSE 1887 Chinook     0 Southern Southeast Alaska
+## 3    SSE 1888 Chinook     0 Southern Southeast Alaska
+## 4    SSE 1889 Chinook     0 Southern Southeast Alaska
+## 5    SSE 1890 Chinook     0 Southern Southeast Alaska
+## 6    SSE 1891 Chinook     0 Southern Southeast Alaska</code></pre>
+<p>By comparing with inner_join tell you that there are missing info in right data.frame</p>
 </div>
 <div id="misc.-function" class="section level1">
 <h1>Misc. Function</h1>
+<p>Separate and Unite</p>
+<pre class="r"><code>dates_df &lt;- data.frame(date = c(&quot;5/24/1930&quot;,
+                                &quot;5/25/1930&quot;,
+                                &quot;5/26/1930&quot;,
+                                &quot;5/27/1930&quot;,
+                                &quot;5/28/1930&quot;),
+                       stringsAsFactors = FALSE)</code></pre>
+<pre class="r"><code>dates_split &lt;-dates_df %&gt;% 
+  separate(date, into = c(&quot;Month&quot;, &quot;Day&quot;, &quot;Year&quot;), sep = &quot;/&quot;, remove = F)
+
+head(dates_split)</code></pre>
+<pre><code>##        date Month Day Year
+## 1 5/24/1930     5  24 1930
+## 2 5/25/1930     5  25 1930
+## 3 5/26/1930     5  26 1930
+## 4 5/27/1930     5  27 1930
+## 5 5/28/1930     5  28 1930</code></pre>
+<p>This can be used to separate e.g., coded sample with multiple levels - TX_Wa_05, TX_Au-06…</p>
+<pre class="r"><code>dates_unite &lt;-dates_split %&gt;% 
+  unite(col = date_iso, Year, Month, Day, sep = &quot;-&quot;)
+
+head(dates_unite)</code></pre>
+<pre><code>##        date  date_iso
+## 1 5/24/1930 1930-5-24
+## 2 5/25/1930 1930-5-25
+## 3 5/26/1930 1930-5-26
+## 4 5/27/1930 1930-5-27
+## 5 5/28/1930 1930-5-28</code></pre>
+<p>for date manipulation use lubridate package stringer package is another one to consider for this kind of work</p>
 </div>
 
 

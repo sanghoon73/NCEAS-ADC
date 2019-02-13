@@ -22,7 +22,8 @@ library(tidyr)
 
 ```{r}
 catch_ori <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1", stringsAsFactors = F)
-region_ori <- read.csv("https://knb.ecoinformatics.org/view/df35b.304.2", stringsAsFactors = F)
+region_ori <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1", stringsAsFactors = F)
+#for windows system, region_defs<-read.csv(url("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1", method = "libcurl"),stringsAsFactors = FALSE)
 ```
 
 # Reformat Catch Data
@@ -103,7 +104,48 @@ head(species_mean)
 
 # Join the Region Definitions
 
+Left join between catch and region definitions
+```{r}
+region_defs <- region_ori %>% 
+  select(code, mgmtArea)
 
+head (region_defs)
+```
 
+```{r}
+Catch_joined <- left_join(catch_clean, region_defs, by = c("Region" = "code")) # or by = "Region" with rename (Region = code)
+
+head (Catch_joined)
+```
+By comparing with inner_join tell you that there are missing info in right data.frame
 
 # Misc. Function
+
+Separate and Unite
+
+```{r}
+dates_df <- data.frame(date = c("5/24/1930",
+                                "5/25/1930",
+                                "5/26/1930",
+                                "5/27/1930",
+                                "5/28/1930"),
+                       stringsAsFactors = FALSE)
+
+```
+
+```{r}
+dates_split <-dates_df %>% 
+  separate(date, into = c("Month", "Day", "Year"), sep = "/", remove = F)
+
+head(dates_split)
+```
+This can be used to separate e.g., coded sample with multiple levels - TX_Wa_05, TX_Au-06...
+
+```{r}
+dates_unite <-dates_split %>% 
+  unite(col = date_iso, Year, Month, Day, sep = "-")
+
+head(dates_unite)
+```
+for date manipulation use lubridate package
+stringer package is another one to consider for this kind of work
