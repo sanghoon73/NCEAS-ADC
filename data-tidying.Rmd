@@ -1,0 +1,33 @@
+---
+title: "Data Reformatting practice"
+author: "SK"
+date: "2/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Two data tables with species and region definition are not very tidy as species table with individual species in the column so needs to move to have species column and count column.
+
+```{r, warning = F, message = F}
+library(dplyr)
+library(tidyr)
+
+# to call stats filter - stats::filter()
+
+catch <- read.csv("catch.csv")
+region <- read.csv("region_def.csv")
+```
+
+# Reformat Catch Data
+
+* remove "all" column.
+* create "species" column.
+    - move from wide to tall
+* general QA
+
+# Join the Region Definitions
+
+# Misc. Function
