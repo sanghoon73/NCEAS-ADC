@@ -148,4 +148,16 @@ dates_unite <-dates_split %>%
 head(dates_unite)
 ```
 for date manipulation use lubridate package
-stringer package is another one to consider for this kind of work
+stringr package is another one to consider for this kind of work - tidyverse
+
+```{r}
+library(stringr)
+
+str_pad("5", 2, side = "left", pad = "0")
+```
+
+write data
+```{r}
+write.csv(catch_clean, "catch_clean.csv", row.names = F, quote = F)
+```
+
