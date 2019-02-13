@@ -16,17 +16,42 @@ library(dplyr)
 library(tidyr)
 
 # to call stats filter - stats::filter()
+```
 
-catch <- read.csv("catch.csv")
-region <- read.csv("region_def.csv")
+[Mike Byerly. Alaska commercial salmon catches by management region (1886- 1997). Gulf of Alaska Data Portal. df35b.304.2.](https://knb.ecoinformatics.org/view/df35b.304.2)
+
+```{r}
+catch_ori <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1", stringsAsFactors = F)
+region_ori <- read.csv("https://knb.ecoinformatics.org/view/df35b.304.2", stringsAsFactors = F)
 ```
 
 # Reformat Catch Data
 
-* remove "all" column.
+* remove "all" and "notes" columns.
 * create "species" column.
     - move from wide to tall
 * general QA
+
+****
+Remove the "all" column by using "select"" function and pipe operator (Cmd + Shift + m)
+
+```{r}
+catch_long <- catch_ori %>% 
+  select(-All, -notesRegCode) %>% #select columns we want
+  gather(key = Species, value = Catch, -Region, -Year) #move wide to long
+#select(Region, Year, Chinook, Sockeye, Coho, Pink, Chum)
+  
+head(catch_long)
+#select(.data, ...)
+```
+
+Move back to wide
+```{r}
+catch_wide <- catch_long %>% 
+  spread(key = Species, value = Catch)
+head(catch_wide)
+```
+
 
 # Join the Region Definitions
 
