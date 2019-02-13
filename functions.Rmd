@@ -40,7 +40,7 @@ celsius_temp
 # Write a function to convert C to F
 
 ```{r}
-C2F <- function(celsius) {
+celsius_to_fahr <- function(celsius) {
   fahr <- celsius * 9/5 + 32
   return (fahr)
 }
@@ -49,6 +49,7 @@ fahrtemps == airtemps
 ```
 
 # Show how to document Functions
+Need to use ROxygen package to have these in help document
 ```{r}
 #' Converts numeric temperature data from degrees in Fahrenhiet to degree Celsius
 #' 
@@ -58,5 +59,11 @@ fahr_to_celsius <- function(fahr) {
   celsius <- (fahr - 32) * 5/9
   return(celsius) 
 }
+```
+
+## source function (.R)
+```{r}
+source("convert.R")
+F2C(airtemps)
 ```
 
