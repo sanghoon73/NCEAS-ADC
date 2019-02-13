@@ -15,9 +15,15 @@ Change 2.
 
 Hello again! This was changed by Helene. And I changed stuff again.
 
+<<<<<<< HEAD
 # Branch
 This is new branch.
 
 Another change.
 
 Now this is final change in the branch.
+=======
+# Helene's branch
+
+Here I make new changes to this README file.
+>>>>>>> Helene_branch
