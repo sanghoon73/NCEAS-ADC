@@ -88,5 +88,27 @@ ggplot(annual_esc, aes(Year, Count, color = Species)) +
 #       units = "in")
 ```
 
-
 # Generate an interative map
+
+### Map the sampling locations for escapement
+
+* find distinct lat/lon/location combinations
+
+```{r}
+locations <- esc %>% 
+  distinct(Location, Latitude, Longitude) %>% 
+  drop_na() #remove all the rows with NA
+
+```
+
+```{r, echo = F}
+datatable(locations)
+```
+
+```{r}
+leaflet(locations) %>% 
+  addTiles() %>% # basemap title
+  addMarkers(lng = ~Longitude, lat = ~Latitude, popup = ~Location)
+```
+
+'geom_sf()' for vector maps with sf package or ggmap
