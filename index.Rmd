@@ -15,10 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(leaflet)
-  library(dplyr)
-  library(tidyr)
-  library(ggplot2)
-  library(DT)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(DT)
+library(scales)
 ```
 
 
@@ -46,28 +47,45 @@ head(annual_esc)
 
 # Generate some static plots
 
-```{r}
+```{r, echo = F}
 ggplot(annual_esc, mapping = aes(x = Species, y = Count, fill = SASAP.Region)) +
 #  scale_fill_brewer(palette = "Dark2") +
   geom_col() #data and mapping calls can be overridden here
 ```
 
-```{r}
-my_theme <- theme_test() +
-  theme(legend.position = "bottom", legend.title = element_blank())
+```{r, echo = F}
+my_theme <- theme_test() + #default theme, so put in front of other customization
+  theme(legend.position = "bottom", 
+        legend.title = element_blank(),
+        plot.title = element_text(hjust = 0.5, face="bold"))
 ```
 
-```{r}
+```{r, echo = F}
 ggplot(filter(annual_esc, SASAP.Region == "Kodiak"), mapping = aes(x = Year, y = Count, color = Species)) +
   geom_line() +
   geom_point() +
+  scale_y_continuous(labels = comma) +
   ylab("Escapement (num of fish)") +
   xlab("Year") +
   ggtitle("Kodiak Salmon Escapement") +
   theme_test() +
-  theme(plot.title = element_text(hjust = 0.5))+
   my_theme
 #  theme(legend.position = "bottom", legend.title = element_blank())
+```
+
+```{r, fig.width = 7, fig.height = 10, , echo = F} 
+ggplot(annual_esc, aes(Year, Count, color = Species)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(labels = comma) +
+  facet_wrap(~SASAP.Region, scales = "free_y", ncol = 2) +
+  my_theme
+
+#ggsave("figures/regional_escapement.png", 
+#       plot = p,
+#       width = 7,
+#       height = 8,
+#       units = "in")
 ```
 
 
