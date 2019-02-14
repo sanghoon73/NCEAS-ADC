@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Reformat the data for plotting
 
+For another page of dyplr/tidyr reference to see [data tidying page](data-tidying.html)
+
 [Alaska Department of Fish and Game, Division of Commercial Fisheries. 2017. Daily salmon escapement counts from the OceanAK database, Alaska, 1921-2017. Knowledge Network for Biocomplexity. doi:10.5063/F1S46Q6M.](https://knb.ecoinformatics.org/view/doi:10.5063/F1S46Q6M)
 
 ```{r}
@@ -105,7 +107,7 @@ locations <- esc %>%
 datatable(locations)
 ```
 
-```{r}
+```{r, echo = F}
 leaflet(locations) %>% 
   addTiles() %>% # basemap title
   addMarkers(lng = ~Longitude, lat = ~Latitude, popup = ~Location)
