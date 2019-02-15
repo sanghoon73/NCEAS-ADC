@@ -67,3 +67,9 @@ source("convert.R")
 F2C(airtemps)
 ```
 
+## use my package
+```{r}
+library(SKtools)
+environment_info("This is cool!")
+```
+
