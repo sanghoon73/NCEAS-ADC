@@ -1,0 +1,71 @@
+---
+title: "ROpenSci"
+author: "Sanghoon Kang"
+date: "2/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+install.packages("rnoaa")
+install.packages("ncdf4")
+
+```{r}
+library(rnoaa)
+library(ncdf4)
+library(ggplot2)
+```
+
+# Accessing buoy data using 'rnoaa'
+
+```{r}
+bd <- buoy(dataset = "cwind",
+           buoyid = 46080,
+           year = 2018,
+           datatype = "c")
+```
+Data looks different from R data.frame as they defined... class(bd) returns "buoy"
+
+```{r}
+wind_speed <- data.frame(time = as.POSIXct(bd$data$time),
+                         speed = bd$data$wind_spd) #data-time formatting with as.POSIXct
+```
+
+```{r, echo = F}
+my_theme <- theme_test() + #default theme, so put in front of other customization
+  theme(legend.position = "bottom", 
+        legend.title = element_blank(),
+        plot.title = element_text(hjust = 0.5, face="bold"))
+```
+
+```{r}
+ggplot(wind_speed, aes(time, speed)) +
+  geom_point() +
+  xlab("") +
+  ylab("Wind speed (m/s") +
+  ggtitle("2018 NOAA buoy observations near Kodiak, AK") +
+  my_theme
+```
+
+# Species occurrence maps using 'mapr'
+
+install.packages("mapr", dependencies = TRUE)
+
+```{r}
+library("mapr")
+library("spocc")
+```
+
+Polar bear and brown bear
+```{r}
+spp <- c("Ursus arctos", "Ursus maritimus") #brown bear and polar bear
+dat <- occ(query = spp,
+           from = "gbif",
+           limit = 500,
+           has_coords = T)
+map_leaflet(dat, size = 1, color = c("brown", "gray"), alpha = 1)
+```
+
